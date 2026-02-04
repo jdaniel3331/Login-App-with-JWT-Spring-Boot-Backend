@@ -1,0 +1,1 @@
+ALTER TABLE users.countries ALTER COLUMN phone_code TYPE VARCHAR(6);
