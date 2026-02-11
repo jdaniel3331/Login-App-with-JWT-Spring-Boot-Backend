@@ -34,7 +34,7 @@ public class User {
     private String email;
     @Column( name = "password_hash", nullable = false)
     private String password;
-    @Column( name = "telephone_num", nullable = false)
+    @Column( name = "telephone_num", nullable = false, length = 15)
     private String telephone;
     @Column( name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private boolean isActive;

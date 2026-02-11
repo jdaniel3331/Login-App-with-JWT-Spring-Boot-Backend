@@ -14,7 +14,7 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "country_id")
     private Short countryId;
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
     @Column(name = "iso_code", nullable = false, unique = true)
     @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.CHAR) // Forzar a Hibernate a tratar la columna como CHAR(2)
