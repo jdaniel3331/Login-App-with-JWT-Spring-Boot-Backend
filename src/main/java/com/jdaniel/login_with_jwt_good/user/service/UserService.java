@@ -8,6 +8,7 @@ import com.jdaniel.login_with_jwt_good.user.repository.CountryRepository;
 import com.jdaniel.login_with_jwt_good.user.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
+import com.jdaniel.login_with_jwt_good.common.utils.EncryptionService;
 import com.jdaniel.login_with_jwt_good.user.dto.CreateUserDto;
 import com.jdaniel.login_with_jwt_good.user.models.User;
 import com.jdaniel.login_with_jwt_good.user.repository.UserRepository;
@@ -19,10 +20,18 @@ public class UserService {
 	private final CountryRepository countryRepository;
 	private final RoleRepository roleRepository;
 	
-	public UserService(UserRepository userRepository, CountryRepository countryRepository, RoleRepository roleRepository) {
+	private final EncryptionService encryptionService;
+	
+	public UserService(
+			UserRepository userRepository, 
+			CountryRepository countryRepository, 
+			RoleRepository roleRepository,
+			EncryptionService encryptionService) {
+		
 		this.userRepository = userRepository;
 		this.countryRepository = countryRepository;
 		this.roleRepository = roleRepository;
+		this.encryptionService = encryptionService;
 	}
 
 	public String registerUser(CreateUserDto newUser) {
@@ -36,7 +45,7 @@ public class UserService {
 		userToBeRegistered.setLastName(newUser.lastName());
 		userToBeRegistered.setSecondLastName(newUser.secondLastName());
 		userToBeRegistered.setEmail(newUser.email());
-		userToBeRegistered.setPassword(newUser.password());
+		userToBeRegistered.setPassword(encryptionService.encode(newUser.password()));
 		userToBeRegistered.setTelephone(newUser.telephoneNum());
 
 		Optional<Country> countryFromDb = countryRepository.findByCountryId(newUser.countryId());
