@@ -37,7 +37,7 @@ public class User {
     @Column( name = "telephone_num", nullable = false, length = 15)
     private String telephone;
     @Column( name = "is_active", nullable = false, columnDefinition = "boolean default true")
-    private boolean isActive;
+    private boolean isActive = true;
     @Column( name = "is_verified", nullable = false, columnDefinition = "boolean default false")
     private boolean isVerified;
     @CreationTimestamp
