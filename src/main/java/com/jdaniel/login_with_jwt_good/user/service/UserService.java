@@ -2,10 +2,12 @@ package com.jdaniel.login_with_jwt_good.user.service;
 
 import java.util.Optional;
 
+import com.jdaniel.login_with_jwt_good.common.exceptions.ResourceAlreadyExistsException;
 import com.jdaniel.login_with_jwt_good.user.models.Country;
 import com.jdaniel.login_with_jwt_good.user.models.Role;
 import com.jdaniel.login_with_jwt_good.user.repository.CountryRepository;
 import com.jdaniel.login_with_jwt_good.user.repository.RoleRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.jdaniel.login_with_jwt_good.common.utils.EncryptionService;
@@ -37,7 +39,7 @@ public class UserService {
 	public String registerUser(CreateUserDto newUser) {
 		Optional<User> userFromDb = userRepository.findByEmail(newUser.email());
 		
-		if(userFromDb.isPresent()) return "User already exists!";
+		if(userFromDb.isPresent()) throw new ResourceAlreadyExistsException(HttpStatus.CONFLICT.name(), "User already exists");
 		
 		User userToBeRegistered = new User();
 		userToBeRegistered.setFirstName(newUser.firstName());
