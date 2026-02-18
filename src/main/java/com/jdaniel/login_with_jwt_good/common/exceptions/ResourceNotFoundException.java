@@ -8,15 +8,14 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResourceAlreadyExistsException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException{
     private String status;
     private String message;
     private int code;
-
-    public ResourceAlreadyExistsException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
-        this.status = HttpStatus.CONFLICT.name();
+        this.status = HttpStatus.NOT_FOUND.name();
         this.message = message;
-        this.code = HttpStatus.CONFLICT.value();
+        this.code = HttpStatus.NOT_FOUND.value();
     }
 }

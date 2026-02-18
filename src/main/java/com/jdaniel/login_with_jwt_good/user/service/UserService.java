@@ -3,6 +3,7 @@ package com.jdaniel.login_with_jwt_good.user.service;
 import java.util.Optional;
 
 import com.jdaniel.login_with_jwt_good.common.exceptions.ResourceAlreadyExistsException;
+import com.jdaniel.login_with_jwt_good.common.exceptions.ResourceNotFoundException;
 import com.jdaniel.login_with_jwt_good.user.models.Country;
 import com.jdaniel.login_with_jwt_good.user.models.Role;
 import com.jdaniel.login_with_jwt_good.user.repository.CountryRepository;
@@ -39,7 +40,7 @@ public class UserService {
 	public String registerUser(CreateUserDto newUser) {
 		Optional<User> userFromDb = userRepository.findByEmail(newUser.email());
 		
-		if(userFromDb.isPresent()) throw new ResourceAlreadyExistsException(HttpStatus.CONFLICT.name(), "User already exists");
+		if(userFromDb.isPresent()) throw new ResourceAlreadyExistsException("User already exists");
 		
 		User userToBeRegistered = new User();
 		userToBeRegistered.setFirstName(newUser.firstName());
@@ -51,13 +52,13 @@ public class UserService {
 		userToBeRegistered.setTelephone(newUser.telephoneNum());
 
 		Optional<Country> countryFromDb = countryRepository.findByCountryId(newUser.countryId());
-		if(countryFromDb.isEmpty()) return "Country not found!";
+		if(countryFromDb.isEmpty()) throw  new ResourceNotFoundException("Country not found");
 
 		userToBeRegistered.setCountry(countryFromDb.get());
 
 		// Por el momento todos lo usuarios registrados serán USER
 		Optional<Role> roleFromDb = roleRepository.findRoleByName("USER");
-		if(roleFromDb.isEmpty()) return "Role not found!";
+		if(roleFromDb.isEmpty()) throw  new ResourceNotFoundException("Role not found");
 
 		userToBeRegistered.setRole(roleFromDb.get());
 
