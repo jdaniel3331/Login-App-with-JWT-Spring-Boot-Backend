@@ -22,14 +22,10 @@ public class User {
     @GeneratedValue // Hibernate detecta que la columna tiene un valor por defecto en la bd
     @Column( name = "user_id", nullable = false, updatable = false)
     private UUID userId;
-    @Column( name = "first_name", nullable = false, length = 100)
-    private String firstName;
-    @Column( name = "middle_name", length = 100)
-    private String middleName;
+    @Column( name = "name", nullable = false, length = 100)
+    private String name;
     @Column( name = "last_name", nullable = false, length = 100)
     private String lastName;
-    @Column( name = "second_last_name", length = 100)
-    private String secondLastName;
     @Column( name = "email", nullable = false, unique = true)
     private String email;
     @Column( name = "password_hash", nullable = false)
