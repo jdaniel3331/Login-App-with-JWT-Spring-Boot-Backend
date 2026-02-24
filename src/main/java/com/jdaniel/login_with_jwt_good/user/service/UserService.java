@@ -42,7 +42,7 @@ public class UserService {
 		if(userFromDb.isPresent()) throw new ResourceAlreadyExistsException("User already exists");
 		
 		User userToBeRegistered = new User();
-		userToBeRegistered.setName(newUser.firstName());
+		userToBeRegistered.setName(newUser.name());
 		userToBeRegistered.setLastName(newUser.lastName());
 		userToBeRegistered.setEmail(newUser.email());
 		userToBeRegistered.setPassword(encryptionService.encode(newUser.password()));
