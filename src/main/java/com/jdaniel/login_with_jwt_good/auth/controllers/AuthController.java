@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -42,7 +45,7 @@ public class AuthController {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.email());
         String token = jwtService.generateToken(userDetails);
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.name(), token, HttpStatus.OK.value());
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.name(), "Success login", HttpStatus.OK.value(), token );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
