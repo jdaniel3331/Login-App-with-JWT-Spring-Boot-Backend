@@ -1,6 +1,7 @@
 package com.jdaniel.login_with_jwt_good.auth.controllers;
 
 import com.jdaniel.login_with_jwt_good.auth.models.dto.LoginRequest;
+import com.jdaniel.login_with_jwt_good.auth.models.dto.LoginResponse;
 import com.jdaniel.login_with_jwt_good.auth.service.UserDetailsServiceImpl;
 import com.jdaniel.login_with_jwt_good.common.response.ApiResponse;
 import com.jdaniel.login_with_jwt_good.common.utils.JwtService;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,14 +37,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginRequest  loginRequest) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest  loginRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
         );
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.email());
         String token = jwtService.generateToken(userDetails);
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK.name(), "Success login", HttpStatus.OK.value(), token );
+        LoginResponse loginResponse = new LoginResponse(token);
+        ApiResponse<LoginResponse> response = new ApiResponse<>(HttpStatus.OK.name(), "Success login", HttpStatus.OK.value(), loginResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
