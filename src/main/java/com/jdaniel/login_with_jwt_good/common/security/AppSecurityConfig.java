@@ -46,7 +46,8 @@ public class AppSecurityConfig {
 		    .csrf(csrf -> csrf.disable())
 		    .cors(cors -> cors.disable())
 		    .authorizeHttpRequests(auth -> auth
-		    		.requestMatchers("/auth/**").permitAll()
+		    		.requestMatchers("/auth/register").permitAll()
+					.requestMatchers("/auth/login").permitAll()
 					.anyRequest().authenticated()
 		    )
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
