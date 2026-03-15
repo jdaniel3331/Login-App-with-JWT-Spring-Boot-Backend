@@ -29,9 +29,9 @@ public class RefreshToken {
     @Column(name = "is_revoked", nullable = false)
     private boolean isRevoked;
     @Column(name = "device_id")
-    private UUID deviceId;
+    private String deviceId;
     @Column(name = "token_family_id")
-    private UUID tokenFamily;
+    private String tokenFamily;
     @Column(name = "user_agent", columnDefinition = "TEXT")
     private String userAgent;
     @Column(name = "ip_address_hash", columnDefinition = "TEXT")
