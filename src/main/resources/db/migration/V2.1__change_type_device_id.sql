@@ -1,0 +1,1 @@
+ALTER TABLE users.refresh_tokens ALTER COLUMN device_id TYPE VARCHAR(255);
