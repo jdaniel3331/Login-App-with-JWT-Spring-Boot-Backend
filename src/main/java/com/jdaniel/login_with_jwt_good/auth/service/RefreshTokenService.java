@@ -50,7 +50,7 @@ public class RefreshTokenService {
         String tokenHash = hashToken(token);
 
         RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenHash)
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
 
         if (refreshToken.isRevoked()) {
             revokeTokenFamily(refreshToken.getTokenFamily());
@@ -66,6 +66,11 @@ public class RefreshTokenService {
         List<RefreshToken> tokens = refreshTokenRepository.findAllByUserAndIsRevokedFalse(u);
         tokens.forEach(token -> token.setRevoked(true));
         refreshTokenRepository.saveAll(tokens);
+    }
+
+    public void revokeToken(RefreshToken refreshToken) {
+        refreshToken.setRevoked(true);
+        refreshTokenRepository.save(refreshToken);
     }
 
     private String hashToken(String rawToken) {

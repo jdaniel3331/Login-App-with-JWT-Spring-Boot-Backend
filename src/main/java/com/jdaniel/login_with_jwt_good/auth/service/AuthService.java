@@ -1,6 +1,8 @@
 package com.jdaniel.login_with_jwt_good.auth.service;
 
+import com.jdaniel.login_with_jwt_good.auth.models.RefreshToken;
 import com.jdaniel.login_with_jwt_good.auth.models.dto.LoginRequest;
+import com.jdaniel.login_with_jwt_good.auth.models.dto.RefreshRequest;
 import com.jdaniel.login_with_jwt_good.common.utils.JwtService;
 import com.jdaniel.login_with_jwt_good.user.models.User;
 import com.jdaniel.login_with_jwt_good.user.repository.UserRepository;
@@ -33,5 +35,21 @@ public class AuthService {
         String refreshToken = refreshTokenService.generateRefreshToken(u, httpRequest, null);
 
         return new String[]{jwtToken, refreshToken};
+    }
+
+    public String[] refresh(RefreshRequest refreshRequest, HttpServletRequest httpRequest) {
+        RefreshToken oldToken = refreshTokenService.validateRefreshToken(refreshRequest.refreshToken());
+
+        User user = oldToken.getUser();
+        String family = String.valueOf(oldToken.getTokenFamily());
+
+        refreshTokenService.revokeToken(oldToken);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        String newAccessToken = jwtService.generateToken(userDetails);
+
+        String newRefreshToken = refreshTokenService.generateRefreshToken(user, httpRequest, family);
+
+        return new String[]{newAccessToken, newRefreshToken};
     }
 }
