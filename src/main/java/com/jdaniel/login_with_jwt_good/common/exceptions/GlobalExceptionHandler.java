@@ -20,4 +20,16 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response = new ApiResponse<>(e.getStatus(),e.getMessage(),e.getCode());
         return new ResponseEntity<>(response,HttpStatus.valueOf(e.getCode()));
     }
+
+    @ExceptionHandler(value = InvalidTokenException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidTokenException(InvalidTokenException e) {
+        ApiResponse<Object> response = new ApiResponse<>(e.getStatus(),e.getMessage(),e.getCode());
+        return new ResponseEntity<>(response, HttpStatus.valueOf(e.getCode()));
+    }
+
+    @ExceptionHandler(value = TokenReuseDetectedException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTokenReuseDetectedException(TokenReuseDetectedException e) {
+        ApiResponse<Object> response = new ApiResponse<>(e.getStatus(),e.getMessage(),e.getCode());
+        return new ResponseEntity<>(response, HttpStatus.valueOf(e.getCode()));
+    }
 }
