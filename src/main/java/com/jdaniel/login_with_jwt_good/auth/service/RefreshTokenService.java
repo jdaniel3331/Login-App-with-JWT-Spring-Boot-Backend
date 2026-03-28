@@ -2,6 +2,8 @@ package com.jdaniel.login_with_jwt_good.auth.service;
 
 import com.jdaniel.login_with_jwt_good.auth.models.RefreshToken;
 import com.jdaniel.login_with_jwt_good.auth.repository.RefreshTokenRepository;
+import com.jdaniel.login_with_jwt_good.common.exceptions.InvalidTokenException;
+import com.jdaniel.login_with_jwt_good.common.exceptions.TokenReuseDetectedException;
 import com.jdaniel.login_with_jwt_good.user.models.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +52,14 @@ public class RefreshTokenService {
         String tokenHash = hashToken(token);
 
         RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenHash)
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(() -> new InvalidTokenException("Refresh token not found"));
 
         if (refreshToken.isRevoked()) {
             revokeTokenFamily(refreshToken.getTokenFamily());
-            throw new RuntimeException("Refresh token has been used. Family revoked");
+            throw new TokenReuseDetectedException("Refresh token has been used. Family revoked");
         }
 
-        if (refreshToken.getExpiresAt().isBefore(OffsetDateTime.now())) throw new RuntimeException("Refresh token has expired");
+        if (refreshToken.getExpiresAt().isBefore(OffsetDateTime.now())) throw new InvalidTokenException("Refresh token has expired");
 
         return refreshToken;
     }
