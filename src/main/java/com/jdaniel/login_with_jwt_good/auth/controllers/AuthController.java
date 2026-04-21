@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -45,8 +46,15 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public String testTokenAuth(){
-        return "Hola desde el enpoint auth/test";
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/test-admin")
+    public String testTokenAuthForAdmin(){
+        return "Hola desde el enpoint auth/test para ADMIN";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/test-user")
+    public String testTokenAuthForUser() {
+        return "Hola Hola desde el enpoint auth/test para USER";
     }
 }
